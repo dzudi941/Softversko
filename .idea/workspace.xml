@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="32e5a23f-d657-4939-8c09-d04f7924eaf4" name="Default" comment="Test github pages.">
+    <list default="true" id="32e5a23f-d657-4939-8c09-d04f7924eaf4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -298,7 +297,7 @@
       <workItem from="1518040240722" duration="4342000" />
       <workItem from="1518119844160" duration="120000" />
       <workItem from="1518215853845" duration="3092000" />
-      <workItem from="1518219051174" duration="555000" />
+      <workItem from="1518219051174" duration="620000" />
     </task>
     <task id="LOCAL-00001" summary="Test github pages.">
       <created>1518042140551</created>
@@ -419,11 +418,18 @@
       <option name="project" value="LOCAL" />
       <updated>1518044533409</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Minor changes">
+      <created>1518219652375</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1518219652375</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11813000" />
+    <option name="totallyTimeSpent" value="11878000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -476,7 +482,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Test github pages." />
-    <option name="LAST_COMMIT_MESSAGE" value="Test github pages." />
+    <MESSAGE value="Minor changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

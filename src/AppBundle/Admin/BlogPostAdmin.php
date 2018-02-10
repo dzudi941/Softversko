@@ -3,8 +3,10 @@
 namespace AppBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use AppBundle\Entity\BlogPost;
 
 /**
 * 
@@ -19,6 +21,7 @@ class BlogPostAdmin extends AbstractAdmin
 				->with('Content', ['class' => 'col-md-9'])
 					->add('title', 'text')
 					->add('body', 'textarea')
+                    ->add('draft', 'checkbox')
 				->end()
 
 				->with('Meta data', ['class' => 'col-md-3'])
@@ -36,10 +39,25 @@ class BlogPostAdmin extends AbstractAdmin
 
 	protected function configureListFields(ListMapper $listMapper)
 	{
-
+        $listMapper
+            ->addIdentifier('title')
+            ->add('category.name')
+            ->add('draft')
+        ;
 	}
 
-	public function toString($object)
+	protected  function configureDatagridFilters(DatagridMapper $filter)
+    {
+        $filter
+            ->add('title')
+            ->add('category', null, [], 'entity', [
+                'class' => 'AppBundle\Entity\Category',
+                'choice_label' => 'name',
+            ])
+        ;
+    }
+
+    public function toString($object)
 	{
 		return $object instanceof BlogPost ? $object->getTitle() : 'Blog Post';
 	}

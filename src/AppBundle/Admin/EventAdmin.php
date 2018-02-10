@@ -17,21 +17,12 @@ class EventAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->tab('Event')
-            ->with('Content', ['class' => 'col-md-9'])
             ->add('name', 'text')
+            ->add('category', 'text')
             ->add('description', 'textarea')
             ->add('priority', 'text')
-            ->end()
-
-            ->with('Meta data', ['class' => 'col-md-3'])
-            ->add('category', 'sonata_type_model', [
-                'class' => 'AppBundle\Entity\Category',
-                'property' => 'name',
-            ])
-            ->end()
-            ->end()
-
+            ->add('date', 'datetime')
+            ->add('createDate', 'datetime')
         ;
     }
 
@@ -39,8 +30,9 @@ class EventAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('category.name')
-            ->add('draft')
+            ->add('category')
+            ->add('priority')
+            ->add('date')
         ;
     }
 
@@ -48,10 +40,6 @@ class EventAdmin extends AbstractAdmin
     {
         $filter
             ->add('name')
-            ->add('category', null, [], 'entity', [
-                'class' => 'AppBundle\Entity\Category',
-                'choice_label' => 'name',
-            ])
         ;
     }
 

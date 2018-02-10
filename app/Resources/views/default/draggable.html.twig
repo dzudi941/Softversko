@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="col-md-12">
+
+
+        <div id="draggable" class="ui-widget-content well event">
+            <p>Drag me around
+            sadsa
+            sadsd
+            asd
+            sad
+            sad
+            sad</p>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $( function() {
+            $( "#draggable" ).draggable();
+        } );
+    </script>
+{% endblock %}

@@ -18,4 +18,12 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
     }
+
+    /**
+     * @Route("/draggable/", name="draggable")
+     */
+    public  function  draggableAction(Request $request)
+    {
+        return $this->render('default/draggable.html.twig');
+    }
 }

@@ -17,6 +17,7 @@ use Symfony\Component\VarDumper\VarDumper;
  */
 class EventController extends Controller
 {
+    var $month = 'February';
     /**
      * Lists all event entities.
      *
@@ -43,6 +44,7 @@ class EventController extends Controller
         return $this->render('event/index.html.twig', array(
             'events' => $events,
             'dates_array' => array_reverse( $dates_array),
+            'month' => $this->month
         ));
     }
 
@@ -169,4 +171,6 @@ class EventController extends Controller
         dump("B");
         return  new JsonResponse("{a: 'a'}");
     }
+
+
 }

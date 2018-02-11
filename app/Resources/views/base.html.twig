@@ -24,7 +24,7 @@
     </head>
     <body>
         {% block navigation %}
-            <nav class="navbar navbar-inverse navbar-fixed-top">
+            <nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <a class="navbar-brand" href="#">WebSiteName</a>
@@ -62,7 +62,9 @@
                 </div>
             </nav>
         {% endblock %}
-        {% block body %}{% endblock %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Events list</h1>
+    <!--<div id="event">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Priority</th>
+                    <th>Date</th>
+                    <th>Create Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td><a href="{{ path('event_show', { 'id': event.id }) }}">{{ event.id }}</a></td>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.category }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.priority }}</td>
+                    <td>{% if event.date %}{{ event.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    <td>{% if event.createDate %}{{ event.createDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('event_show', { 'id': event.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('event_edit', { 'id': event.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>-->
+    <div id="event">
+        <table class="table">
+            <tbody>
+            {% for date in dates_array %}
+                <tr>
+                    <td>
+                        {{ date }}
+                    </td>
+                    <td>
+                        {% for event in events %}
+                            {% if event.date|date("Y-m-d") == date %}
+                                <div class="event col-md-2">
+                                    <input type="hidden" name="id" value="{{ event.id }}">
+                                    <h3 class="event-title">{{ event.name }}</h3>
+                                    <p class="event-description">{{ event.description }}</p>
+                                    <p class="event-date">{% if event.date %}{{ event.date|date('Y-m-d H:i:s') }}{% endif %}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <ul>
+        <li>
+            <a href="{{ path('event_new') }}">Create a new event</a>
+        </li>
+    </ul>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        /*$( function() {
+            $( ".draggable" ).draggable();
+        } );*/
+        var c = {};
+
+        $(".event").draggable({
+            helper: "clone",
+            start: function(event, ui) {
+                c.tr = this;
+                c.helper = ui.helper;
+            }
+        });
+
+        $("#event tr").droppable({
+            drop: function(event, ui) {
+
+                //var myRow = $(this).find('td');
+                console.log(ui.draggable.children('input[name=id]').val());
+                var eventId = ui.draggable.children('input[name=id]').val();
+                var newDate = $(this).find('td').eq(0).text();
+                $.post('{{ path('update_event_date') }}', {updateDate: {id: eventId, newDate: newDate}});
+                $(this).find('td')[1].append(ui.draggable[0]);
+                //$(c.tr).html(myRow);
+
+
+                //$(c.tr).remove();
+                //$(c.helper).remove();
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,3 +1,7 @@
+app_event:
+    resource: "@AppBundle/Controller/EventController.php"
+    type:     annotation
+
 app_test:
     resource: "@AppBundle/Controller/TestController.php"
     type:     annotation

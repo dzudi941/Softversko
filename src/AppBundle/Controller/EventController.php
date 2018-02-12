@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Event controller.
@@ -51,12 +52,24 @@ class EventController extends Controller
     /**
      * Creates a new event entity.
      *
-     * @Route("/new", name="event_new")
+     * @Route("/new/{dateTime}", name="event_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $dateTime=null)
     {
         $event = new Event();
+        $date = new \DateTime();
+        $event->setCreateDate($date);
+
+        if($dateTime!=null) {
+            $a = explode('-',$dateTime);
+            $newDate = new \DateTime();
+            $newDate->setDate($a[0],$a[1],$a[2]);
+            $event->setDate($newDate);
+        }
+        else
+            $event->setDate($date );
+
         $form = $this->createForm('AppBundle\Form\EventType', $event);
         $form->handleRequest($request);
 

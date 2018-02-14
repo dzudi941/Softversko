@@ -26,4 +26,12 @@ class DefaultController extends Controller
     {
         return $this->render('default/draggable.html.twig');
     }
+
+    /**
+     * @Route("/calendar/", name="calendar")
+     */
+    public  function  calendarAction(Request $request)
+    {
+        return $this->render('default/calendar.html.twig');
+    }
 }

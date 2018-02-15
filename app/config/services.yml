@@ -54,8 +54,3 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Event }
         public: true
-
-    app_bundle.service.listener:
-        class: AppBundle\Listener\LoadDataListener
-        tags:
-          - { name: 'kernel.event_listener', event: 'fullcalendar.set_data', method: loadData }

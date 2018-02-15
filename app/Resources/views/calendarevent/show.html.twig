@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Calendarevent</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ calendarEvent.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ calendarEvent.title }}</td>
+            </tr>
+            <tr>
+                <th>Allday</th>
+                <td>{% if calendarEvent.allDay %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Start</th>
+                <td>{% if calendarEvent.start %}{{ calendarEvent.start|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>End</th>
+                <td>{% if calendarEvent.end %}{{ calendarEvent.end|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ calendarEvent.url }}</td>
+            </tr>
+            <tr>
+                <th>Classname</th>
+                <td>{{ calendarEvent.className }}</td>
+            </tr>
+            <tr>
+                <th>Editable</th>
+                <td>{% if calendarEvent.editable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Starteditable</th>
+                <td>{% if calendarEvent.startEditable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Durationeditable</th>
+                <td>{% if calendarEvent.durationEditable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Resourceeditable</th>
+                <td>{% if calendarEvent.resourceEditable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Rendering</th>
+                <td>{{ calendarEvent.rendering }}</td>
+            </tr>
+            <tr>
+                <th>Overlap</th>
+                <td>{% if calendarEvent.overlap %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ calendarEvent.color }}</td>
+            </tr>
+            <tr>
+                <th>Backgroundcolor</th>
+                <td>{{ calendarEvent.backgroundColor }}</td>
+            </tr>
+            <tr>
+                <th>Bordercolor</th>
+                <td>{{ calendarEvent.borderColor }}</td>
+            </tr>
+            <tr>
+                <th>Textcolor</th>
+                <td>{{ calendarEvent.textColor }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('calendarevent_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('calendarevent_edit', { 'id': calendarEvent.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

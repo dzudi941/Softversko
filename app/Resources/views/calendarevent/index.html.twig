@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/fullcalendar/css/fullcalendar/fullcalendar.min.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <!--<h1>Calendarevents list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Allday</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Url</th>
+                <th>Classname</th>
+                <th>Editable</th>
+                <th>Starteditable</th>
+                <th>Durationeditable</th>
+                <th>Resourceeditable</th>
+                <th>Rendering</th>
+                <th>Overlap</th>
+                <th>Color</th>
+                <th>Backgroundcolor</th>
+                <th>Bordercolor</th>
+                <th>Textcolor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for calendarEvent in calendarEvents %}
+            <tr>
+                <td><a href="{{ path('calendarevent_show', { 'id': calendarEvent.id }) }}">{{ calendarEvent.id }}</a></td>
+                <td>{{ calendarEvent.title }}</td>
+                <td>{% if calendarEvent.allDay %}Yes{% else %}No{% endif %}</td>
+                <td>{% if calendarEvent.start %}{{ calendarEvent.start|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if calendarEvent.end %}{{ calendarEvent.end|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ calendarEvent.url }}</td>
+                <td>{{ calendarEvent.className }}</td>
+                <td>{% if calendarEvent.editable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if calendarEvent.startEditable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if calendarEvent.durationEditable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if calendarEvent.resourceEditable %}Yes{% else %}No{% endif %}</td>
+                <td>{{ calendarEvent.rendering }}</td>
+                <td>{% if calendarEvent.overlap %}Yes{% else %}No{% endif %}</td>
+                <td>{{ calendarEvent.color }}</td>
+                <td>{{ calendarEvent.backgroundColor }}</td>
+                <td>{{ calendarEvent.borderColor }}</td>
+                <td>{{ calendarEvent.textColor }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('calendarevent_show', { 'id': calendarEvent.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('calendarevent_edit', { 'id': calendarEvent.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('calendarevent_new') }}">Create a new calendarEvent</a>
+        </li>
+    </ul>-->
+
+    <div id="calendar-holder"></div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!--<script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/lib/jquery.min.js') }}"></script>-->
+    <script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/lib/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/fullcalendar.min.js') }}"></script>
+    <!--<script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/fullcalendar.default-settings.js') }}"></script>-->
+    <script type="text/javascript">
+        /*$(function () {
+            $('#calendar-holder').fullCalendar({
+                header: {
+                    left: 'prev, next',
+                    center: 'title',
+                    right: 'month, basicWeek, basicDay,'
+                },
+                lazyFetching: true,
+                timeFormat: {
+                    agenda: 'h:mmt',
+                    '': 'h:mmt'
+                },
+                eventStartEditable:{
+                    default:true
+                },
+                eventSources: [
+                    {
+                        url: '{{ path("load_calendar_event") }}',
+                        type: 'POST',
+                        data: {},
+                        error: function () {}
+                    }
+                ],
+                eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+                    console.log(event);
+                },
+
+                dayClick: function(day) {
+                    console.log(day);
+                    alert('a day has been clicked!');
+                }
+
+            });
+        });*/
+
+        $(document).ready(function() {
+
+            $('#calendar-holder').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month, basicWeek, basicDay,agendaWeek,agendaDay'
+                },
+
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectHelper: true,
+                select: function(start, end) {
+                    var title = prompt('Event Title:');
+                    var eventData;
+                    if (title) {
+                        eventData = {
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+                        console.log(start);
+                        console.log(end);
+                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    }
+                    $('#calendar').fullCalendar('unselect');
+                },
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                eventSources: [
+                    {
+                        url: '{{ path("load_calendar_event") }}',
+                        type: 'POST',
+                        data: {},
+                        error: function () {}
+                    }
+                ],
+                eventRender: function(event, element) {
+                    console.log(element[0].parentNode);
+                    /*element.qtip({
+                        content: event.description
+                    });*/
+                    //element.appendChild(event.description);
+                    if(event.description)
+                    {
+                        var divTag = document.createElement("DIV");
+                        divTag.appendChild(document.createTextNode(event.description));
+                        var newContent = document.createTextNode(event.description);
+                        element[0].appendChild(divTag);
+                    }
+
+                    var aTag = document.createElement("A");
+                    aTag.appendChild(document.createTextNode("Edit"));
+                    aTag.href = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.id);
+                    element[0].appendChild(aTag);
+
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

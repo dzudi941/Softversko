@@ -7,9 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\CalendarEvent as MyCustomEvent;
 
 /**
  * Event controller.
@@ -183,6 +185,28 @@ class EventController extends Controller
 
         dump("B");
         return  new JsonResponse("{a: 'a'}");
+    }
+
+    /**
+     * @Route("/testCalendarEvent", name="test_calendar_event")
+     * @Method("POST")
+     */
+    public function testCalendarEventAction(Request $request)
+    {
+
+        $ev = new MyCustomEvent('Event Title 2', new \DateTime(), new \DateTime("+ 1 day"));
+        $ev2 = new MyCustomEvent('Event Title 4', new \DateTime(), new \DateTime("+ 1 day"));
+        $evAr = [];
+        $evAr[] = $ev;
+        $evAr[] = $ev2;
+        $data = json_encode($evAr);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent($data);
+        $response->setStatusCode(200);
+
+        return $response;
     }
 
 

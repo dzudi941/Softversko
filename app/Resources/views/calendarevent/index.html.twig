@@ -137,11 +137,24 @@
                             start: start,
                             end: end
                         };
-                        console.log(start);
+                        console.log("date  " + start.toDate().toDateString());
+                        console.log("date utc  " + start.toDate().toUTCString());
+                        console.log("date locale  " + start.toDate().toLocaleString());
+
                         console.log(end);
-                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                        console.log(eventData);
+                        $.post("{{ path('new_calendar_event') }}",
+                            {newEvent:
+                                    {
+                                        title: title,
+                                        start: start.toDate().toUTCString(),
+                                        end: end.toDate().toUTCString()
+                                    }
+                            });
+                        $('#calendar-holder').fullCalendar('renderEvent', eventData, true); // stick? = true
+
                     }
-                    $('#calendar').fullCalendar('unselect');
+                    $('#calendar-holder').fullCalendar('unselect');
                 },
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -154,7 +167,7 @@
                     }
                 ],
                 eventRender: function(event, element) {
-                    console.log(element[0].parentNode);
+                    //console.log(element[0].parentNode);
                     /*element.qtip({
                         content: event.description
                     });*/
@@ -163,7 +176,7 @@
                     {
                         var divTag = document.createElement("DIV");
                         divTag.appendChild(document.createTextNode(event.description));
-                        var newContent = document.createTextNode(event.description);
+                        divTag.className = "event-description";
                         element[0].appendChild(divTag);
                     }
 
@@ -172,6 +185,22 @@
                     aTag.href = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.id);
                     element[0].appendChild(aTag);
 
+                },
+                eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
+                    //alert(event.title + " was dropped on " + event.start.format());
+
+                    //if (!confirm("Are you sure about this change?")) {
+                    //    revertFunc();
+                    //}
+                    console.log(event);
+                    $.post("{{ path('edit_calendar_event') }}",
+                        {editEvent:
+                                {
+                                    entityId: event.entityId,
+                                    title: event.title,
+                                    start: event.start.toDate().toUTCString()
+                                }
+                        });
                 }
             });
 

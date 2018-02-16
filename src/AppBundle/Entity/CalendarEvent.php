@@ -142,6 +142,20 @@ class CalendarEvent
 
 
     /**
+     * Set id.
+     *
+     * @param int $id
+     *
+     * @return CalendarEvent
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -565,7 +579,7 @@ class CalendarEvent
     public function toArray()
     {
         $result = array();
-        $result['id'] = $this->getId();
+        $result['entityId'] = $this->getId();
         $result['title'] = $this->getTitle();
         $result['start'] =  $this->getStart()->format(\DateTime::ATOM);
 
@@ -601,5 +615,44 @@ class CalendarEvent
         $result['description'] = $this->getDescription();
 
         return $result;
+    }
+
+    public function fromArray(array $inArray)
+    {
+        $this->setTitle($inArray['title']);
+        $this->setStart(new \DateTime($inArray['start']));
+
+        if(array_key_exists('allDay', $inArray))
+            $this->setAllDay($inArray['allDay']);
+        if(array_key_exists('end', $inArray))
+            $this->setEnd(new \DateTime($inArray['end']));
+        if(array_key_exists('url', $inArray))
+            $this->setUrl($inArray['url']);
+        if(array_key_exists('className', $inArray))
+            $this->setClassName($inArray['className']);
+        if(array_key_exists('editable', $inArray))
+            $this->setEditable($inArray['editable']);
+        if(array_key_exists('startEditable', $inArray))
+            $this->setStartEditable($inArray['startEditable']);
+        if(array_key_exists('durationEditable', $inArray))
+            $this->setDurationEditable($inArray['durationEditable']);
+        if(array_key_exists('resourceEditable', $inArray))
+            $this->setResourceEditable($inArray['resourceEditable']);
+        if(array_key_exists('rendering', $inArray))
+            $this->setRendering($inArray['rendering']);
+        if(array_key_exists('overlap', $inArray))
+            $this->setOverlap($inArray['overlap']);
+        if(array_key_exists('color', $inArray))
+            $this->setColor($inArray['color']);
+        if(array_key_exists('backgroundColor', $inArray))
+            $this->setBackgroundColor($inArray['backgroundColor']);
+        if(array_key_exists('borderColor', $inArray))
+            $this->setBorderColor($inArray['borderColor']);
+        if(array_key_exists('textColor', $inArray))
+            $this->setTextColor($inArray['textColor']);
+        if(array_key_exists('description', $inArray))
+            $this->setDescription($inArray['description']);
+
+        return $this;
     }
 }

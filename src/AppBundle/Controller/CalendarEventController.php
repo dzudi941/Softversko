@@ -159,4 +159,50 @@ class CalendarEventController extends Controller
 
         return $response;
     }
+
+    /**
+     * @Route("/newCalendarEvent", name="new_calendar_event")
+     * @Method("POST")
+     */
+    public function newCalendarEventAction(Request $request)
+    {
+        $calendarEvent = new CalendarEvent();
+        $calendarEvent->fromArray($request->get('newEvent'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($calendarEvent);
+        $em->flush();
+
+
+
+        dump(array('result' => $calendarEvent));
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent("{'success': true}");
+        $response->setStatusCode(200);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/editCalendarEvent", name="edit_calendar_event")
+     * @Method("POST")
+     */
+    public  function editCalendarEvent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $calendarEvent = new CalendarEvent();
+        $calendarEvent->setId($request->get('editEvent')['entityId']);
+        $calendarEvent->fromArray($request->get('editEvent'));
+        $em->merge($calendarEvent);
+        $em->flush();
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent("{'success': true}");
+        $response->setStatusCode(200);
+
+        return $response;
+    }
+
 }

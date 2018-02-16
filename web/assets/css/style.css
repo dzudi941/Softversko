@@ -33,3 +33,9 @@ body{
     overflow: auto;
     overflow-y: auto;
 }
+
+.event-description{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: justify;
+}

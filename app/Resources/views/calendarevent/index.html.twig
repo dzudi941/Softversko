@@ -5,73 +5,27 @@
 {% endblock %}
 
 {% block body %}
-    <!--<h1>Calendarevents list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Allday</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Url</th>
-                <th>Classname</th>
-                <th>Editable</th>
-                <th>Starteditable</th>
-                <th>Durationeditable</th>
-                <th>Resourceeditable</th>
-                <th>Rendering</th>
-                <th>Overlap</th>
-                <th>Color</th>
-                <th>Backgroundcolor</th>
-                <th>Bordercolor</th>
-                <th>Textcolor</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for calendarEvent in calendarEvents %}
-            <tr>
-                <td><a href="{{ path('calendarevent_show', { 'id': calendarEvent.id }) }}">{{ calendarEvent.id }}</a></td>
-                <td>{{ calendarEvent.title }}</td>
-                <td>{% if calendarEvent.allDay %}Yes{% else %}No{% endif %}</td>
-                <td>{% if calendarEvent.start %}{{ calendarEvent.start|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if calendarEvent.end %}{{ calendarEvent.end|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ calendarEvent.url }}</td>
-                <td>{{ calendarEvent.className }}</td>
-                <td>{% if calendarEvent.editable %}Yes{% else %}No{% endif %}</td>
-                <td>{% if calendarEvent.startEditable %}Yes{% else %}No{% endif %}</td>
-                <td>{% if calendarEvent.durationEditable %}Yes{% else %}No{% endif %}</td>
-                <td>{% if calendarEvent.resourceEditable %}Yes{% else %}No{% endif %}</td>
-                <td>{{ calendarEvent.rendering }}</td>
-                <td>{% if calendarEvent.overlap %}Yes{% else %}No{% endif %}</td>
-                <td>{{ calendarEvent.color }}</td>
-                <td>{{ calendarEvent.backgroundColor }}</td>
-                <td>{{ calendarEvent.borderColor }}</td>
-                <td>{{ calendarEvent.textColor }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('calendarevent_show', { 'id': calendarEvent.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('calendarevent_edit', { 'id': calendarEvent.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('calendarevent_new') }}">Create a new calendarEvent</a>
-        </li>
-    </ul>-->
-
     <div id="calendar-holder"></div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <input type="submit" value="Create" />
+                    {{ form_end(form) }}
+                </div>
+                <div class="modal-footer">
+                    <button id="modalCloseButton" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 
@@ -118,6 +72,7 @@
 
         $(document).ready(function() {
 
+
             $('#calendar-holder').fullCalendar({
                 header: {
                     left: 'prev,next today',
@@ -128,8 +83,9 @@
                 navLinks: true, // can click day/week names to navigate views
                 selectable: true,
                 selectHelper: true,
-                select: function(start, end) {
-                    var title = prompt('Event Title:');
+                select: function(start, end,jsEvent) {
+
+                   /* var title = prompt('Event Title:');
                     var eventData;
                     if (title) {
                         eventData = {
@@ -137,24 +93,24 @@
                             start: start,
                             end: end
                         };
-                        console.log("date  " + start.toDate().toDateString());
-                        console.log("date utc  " + start.toDate().toUTCString());
-                        console.log("date locale  " + start.toDate().toLocaleString());
-
+                        console.log(start);
                         console.log(end);
-                        console.log(eventData);
-                        $.post("{{ path('new_calendar_event') }}",
-                            {newEvent:
-                                    {
-                                        title: title,
-                                        start: start.toDate().toUTCString(),
-                                        end: end.toDate().toUTCString()
-                                    }
-                            });
-                        $('#calendar-holder').fullCalendar('renderEvent', eventData, true); // stick? = true
-
+                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
                     }
-                    $('#calendar-holder').fullCalendar('unselect');
+                    $('#calendar').fullCalendar('unselect');*/
+                    //$('.modalSubmitButton').show();
+                    console.log(jsEvent.originalEvent.clientX);
+                    var modal = $('#myModal').modal('show');
+                    /*var button = $(ev.target);
+                    var offset = button.offset();*/
+                    var top = jsEvent.originalEvent.clientY;
+                    modal.css("top",top);
+
+                    var windowWidth = $(window).width();
+                    var leftOffset = parseInt(jsEvent.originalEvent.clientX)-(parseInt(windowWidth)/2);
+                    modal.css("left",leftOffset);
+
+                   //ev.preventDefault();
                 },
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -167,7 +123,7 @@
                     }
                 ],
                 eventRender: function(event, element) {
-                    //console.log(element[0].parentNode);
+                    console.log(element[0].parentNode);
                     /*element.qtip({
                         content: event.description
                     });*/
@@ -176,7 +132,7 @@
                     {
                         var divTag = document.createElement("DIV");
                         divTag.appendChild(document.createTextNode(event.description));
-                        divTag.className = "event-description";
+                        var newContent = document.createTextNode(event.description);
                         element[0].appendChild(divTag);
                     }
 
@@ -186,24 +142,93 @@
                     element[0].appendChild(aTag);
 
                 },
-                eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
-                    //alert(event.title + " was dropped on " + event.start.format());
 
-                    //if (!confirm("Are you sure about this change?")) {
-                    //    revertFunc();
-                    //}
-                    console.log(event);
-                    $.post("{{ path('edit_calendar_event') }}",
-                        {editEvent:
-                                {
-                                    entityId: event.entityId,
-                                    title: event.title,
-                                    start: event.start.toDate().toUTCString()
-                                }
-                        });
-                }
+                /*dayRender: function (date,cell) {
+                  /!* var td = $(cell);
+                   var button = td.add( "button" ).addClass( "btn btn-info btn-circle btn-lg addCalendarEventButton" );
+                    button.add("i").addClass("glyphicon glyphicon-plus");*!/
+                  var btn = $(cell).append( "<button class='btn btn-info btn-circle btn-xs modalSubmitButton'><i class=\"glyphicon glyphicon-plus\"></i></button>" );
+                  btn.hide();
+                }*/
             });
 
+        });
+
+        $('#myModal').on('shown.bs.modal', function () {
+
+
+            // get the viewport height
+            var viewportHeight = $(window).height();
+            console.log ('viewportHeight = ' + viewportHeight);
+
+
+            // get the viewport width
+            var viewportWidth = $(window).width();
+            console.log ('viewportWidth = ' + viewportWidth);
+
+            var modalDialogHeight = $(this).find('.modal-dialog').outerHeight(true);
+            console.log ('modalDialogHeight = ' + modalDialogHeight);
+
+            var modalDialogWidth = $(this).find('.modal-dialog').outerWidth(true);
+            console.log ('modalDialogWidth = ' + modalDialogWidth);
+
+            var parentHeight = $( window ).height();
+            var modal = $('#myModal');
+            var top = modal.offset().top;
+
+            console.log('Top offset = ' + top);
+            console.log('Parent height = '+ parentHeight);
+
+            if(parseInt(top)+parseInt(modalDialogHeight)>parseInt(parentHeight)) {
+                top=parseInt(parentHeight)-parseInt(modalDialogHeight);
+
+                // modal.css("top", top);
+                console.log("Top offset changed to: "+top);
+            }
+
+            //When the browser window is being resized
+            var modalContentWidthHeight = function () {
+
+                var modalContentWidth = $('#myModal').find('.modal-content').outerWidth(true);
+                console.log ('modalContentWidth = ' + modalContentWidth);
+
+                var modalContentHeight = $('#myModal').find('.modal-content').outerHeight(true);
+                console.log ('modalContentHeight = ' + modalContentHeight);
+            };
+
+            $(window).resize(modalContentWidthHeight);
+
+        });
+
+        /*$('#myform').on('submit', function(ev) {
+            var modal = $('#myModal').modal('show');
+            var button = $('#modalSubmitButton');
+            var offset = button.offset();
+            var top=offset.top;
+            modal.css("top", top);
+
+            var parentWidth = $( window ).width();
+            var left = parseInt(offset.left)- (parseInt(parentWidth)/2 );
+            modal.css("left",left);
+
+            ev.preventDefault()});
+*/
+        $('.modalSubmitButton').click(function (ev) {
+            var modal = $('#myModal').modal('show');
+            var button = $(ev.target);
+            var offset = button.offset();
+            var top = offset.top;
+            modal.css("top",top);
+
+            var windowWidth = $(window).width();
+            var leftOffset = parseInt(offset.left)-(parseInt(windowWidth)/2);
+            modal.css("left",leftOffset);
+
+            ev.preventDefault()
+        });
+
+        $('#modalCloseButton').click(function() {
+            $('#myModal').modal('hide');
         });
     </script>
 {% endblock %}

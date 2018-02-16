@@ -83,7 +83,7 @@
                 navLinks: true, // can click day/week names to navigate views
                 selectable: true,
                 selectHelper: true,
-                select: function(start, end) {
+                select: function(start, end,jsEvent) {
 
                    /* var title = prompt('Event Title:');
                     var eventData;
@@ -99,14 +99,15 @@
                     }
                     $('#calendar').fullCalendar('unselect');*/
                     //$('.modalSubmitButton').show();
+                    console.log(jsEvent.originalEvent.clientX);
                     var modal = $('#myModal').modal('show');
-                    var button = $(ev.target);
-                    var offset = button.offset();
-                    var top = offset.top;
+                    /*var button = $(ev.target);
+                    var offset = button.offset();*/
+                    var top = jsEvent.originalEvent.clientY;
                     modal.css("top",top);
 
                     var windowWidth = $(window).width();
-                    var leftOffset = parseInt(offset.left)-(parseInt(windowWidth)/2);
+                    var leftOffset = parseInt(jsEvent.originalEvent.clientX)-(parseInt(windowWidth)/2);
                     modal.css("left",leftOffset);
 
                    //ev.preventDefault();
@@ -181,7 +182,7 @@
             if(parseInt(top)+parseInt(modalDialogHeight)>parseInt(parentHeight)) {
                 top=parseInt(parentHeight)-parseInt(modalDialogHeight);
 
-                modal.css("top", top);
+                // modal.css("top", top);
                 console.log("Top offset changed to: "+top);
             }
 

@@ -22,14 +22,26 @@ class CalendarEventController extends Controller
      * @Route("/", name="calendarevent_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $calendarEvents = $em->getRepository('AppBundle:CalendarEvent')->findAll();
+        $calendarEvent = new CalendarEvent();
+        $form = $this->createForm('AppBundle\Form\CalendarEventType', $calendarEvent);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($calendarEvent);
+            $em->flush();
+
+            return $this->redirectToRoute('calendarevent_show', array('id' => $calendarEvent->getId()));
+        }
 
         return $this->render('calendarevent/index.html.twig', array(
             'calendarEvents' => $calendarEvents,
+            'form' => $form->createView(),
         ));
     }
 

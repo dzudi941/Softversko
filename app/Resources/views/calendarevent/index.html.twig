@@ -13,15 +13,44 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                 </div>
-                <div class="modal-body">
-                    {{ form_start(form) }}
+                <div class="modal-body" >
+                    <!--{{ form_start(form) }}
                     {{ form_widget(form) }}
                     <input type="submit" value="Create" />
-                    {{ form_end(form) }}
+                    {{ form_end(form) }}-->
+                    <form class="row" id="calendar_event_form">
+                        <div id="basic_calendar_event_form">
+                            <div class="col-md-6">
+                                <label>Title:</label>
+                                <input class="form-control" type="text" name="title">
+                                <input class="form-check-input" type="checkbox" name="allDay">
+                                <label>All Day</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Description</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <a href="javascript:void(0)" data-toggle="collapse" data-target="#advanced_calendar_event_form">Advanced options</a>
+                        </div>
+                        <div id="advanced_calendar_event_form" class="collapse">
+                            <div class="col-md-6">
+                                <label>Title:</label>
+                                <input class="form-control" type="text" name="class">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-check-input" type="checkbox" name="nesto">
+                                <label>All Day</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="start" id="calendar_event_form_start">
+                        <input type="hidden" name="end" id="calendar_event_form_end">
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="modalCloseButton" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button onclick="$('#calendar_event_form').find('input, textarea').val('');" id="modalCloseButton" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button onclick="createNewCalendarEvent()" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -83,23 +112,15 @@
                 navLinks: true, // can click day/week names to navigate views
                 selectable: true,
                 selectHelper: true,
-                select: function(start, end,jsEvent) {
+                select: function(start, end, jsEvent) {
 
-                   /* var title = prompt('Event Title:');
-                    var eventData;
-                    if (title) {
-                        eventData = {
-                            title: title,
-                            start: start,
-                            end: end
-                        };
-                        console.log(start);
-                        console.log(end);
-                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    }
-                    $('#calendar').fullCalendar('unselect');*/
-                    //$('.modalSubmitButton').show();
                     console.log(jsEvent.originalEvent.clientX);
+                    //var calendarEventForm = $('#calendar_event_form');
+                    //console.log(calendarEventForm);
+                    //var divTag = document.createElement("INPUT");
+                    //divTag.appendChild(document.createTextNode("Aaa"));
+                    //calendarEventForm[0].appendChild(divTag);
+
                     var modal = $('#myModal').modal('show');
                     /*var button = $(ev.target);
                     var offset = button.offset();*/
@@ -111,6 +132,9 @@
                     modal.css("left",leftOffset);
 
                    //ev.preventDefault();
+                    $('#calendar_event_form_start').val(start.toDate().toUTCString());
+                    $('#calendar_event_form_end').val(end.toDate().toUTCString());
+
                 },
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -123,7 +147,7 @@
                     }
                 ],
                 eventRender: function(event, element) {
-                    console.log(element[0].parentNode);
+                    //console.log(element[0].parentNode);
                     /*element.qtip({
                         content: event.description
                     });*/
@@ -132,7 +156,7 @@
                     {
                         var divTag = document.createElement("DIV");
                         divTag.appendChild(document.createTextNode(event.description));
-                        var newContent = document.createTextNode(event.description);
+                        divTag.className = "event-description";
                         element[0].appendChild(divTag);
                     }
 
@@ -142,6 +166,18 @@
                     element[0].appendChild(aTag);
 
                 },
+                eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
+
+                    console.log(event);
+                    $.post("{{ path('edit_calendar_event') }}",
+                        {editEvent:
+                                {
+                                    entityId: event.entityId,
+                                    title: event.title,
+                                    start: event.start.toDate().toUTCString()
+                                }
+                        });
+                }
 
                 /*dayRender: function (date,cell) {
                   /!* var td = $(cell);
@@ -153,6 +189,30 @@
             });
 
         });
+        
+        function createNewCalendarEvent() {
+            console.log($('#calendar_event_form').serializeArray());
+            var calendarEventForm = $('#calendar_event_form');
+            var calendarEventFormArray = calendarEventForm.serializeArray();
+            var newEvent = {};
+            for(var i =0; i< calendarEventFormArray.length; i++)
+            {
+                newEvent[calendarEventFormArray[i].name] = calendarEventFormArray[i].value;
+            }
+            console.log(newEvent);
+            $.post("{{ path('new_calendar_event') }}",
+                {newEvent:
+                    newEvent
+                });
+
+            $('#calendar-holder').fullCalendar('renderEvent', newEvent, true);
+
+            $('#calendar-holder').fullCalendar('unselect');
+
+            calendarEventForm.find("input, textarea").val("");
+
+            $('#myModal').modal('hide');
+        }
 
         $('#myModal').on('shown.bs.modal', function () {
 

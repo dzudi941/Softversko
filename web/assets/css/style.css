@@ -42,6 +42,11 @@ body{
 
 .event-delete-button{
     float: right;
+    color: #9f191f;
+}
+
+.event-edit-button{
+    color: white;
 }
 
 .event-options{

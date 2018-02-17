@@ -198,10 +198,10 @@
 
                     var eventOptionsTag = $('<div class="event-options"></div>');
                     var editCalendarEventPath = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.entityId);
-                    var aTagEdit = $('<a href="'+editCalendarEventPath+'">Edit</a>');
+                    var aTagEdit = $('<a class="event-edit-button" href="'+editCalendarEventPath+'"><i class="fa fa-edit fa-lg"></i></a>');
                     aTagEdit.appendTo(eventOptionsTag);
 
-                    var aTagDelete = $('<a class="event-delete-button">Delete</a>');
+                    var aTagDelete = $('<a class="event-delete-button"><i class="fa fa-trash-o fa-lg"></i></a>');
                     console.log(event._id);
                     aTagDelete.attr('data-entity-id', event.entityId);
                     aTagDelete.attr('data-event-id', event._id);
@@ -224,7 +224,8 @@
                                 {
                                     entityId: event.entityId,
                                     title: event.title,
-                                    start: event.start.toDate().toUTCString()
+                                    start: event.start.toDate().toUTCString(),
+                                    end: event.end.toDate().toUTCString()
                                 }
                         });
                 }

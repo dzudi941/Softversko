@@ -7,6 +7,7 @@
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
@@ -24,7 +25,6 @@
     </head>
     <body>
         {% block navigation %}
-            <button id="button">Send a notification</button>
             <nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -68,7 +68,7 @@
         </div>
         {% block javascripts %}{% endblock %}
         <script type="text/javascript">
-            document.getElementById('button').addEventListener('click',function(){
+            /*document.getElementById('button').addEventListener('click',function(){
                 if ('Notification' in window) {
                     let ask = Notification.requestPermission();
                     ask.then( permission => {
@@ -83,7 +83,7 @@
                     }
                 });
                 }
-            });
+            });*/
             $.post("{{ path('current_calendar_event') }}", {'a':"A"}, function (data) {
                 console.log(data);
                 for (var i = 0; i < data.length; i++)

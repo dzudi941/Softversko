@@ -18,7 +18,7 @@
                     {{ form_widget(form) }}
                     <input type="submit" value="Create" />
                     {{ form_end(form) }}-->
-                    <form class="row" id="calendar_event_form">
+                    <form class="col-md-12" id="calendar_event_form">
                         <div id="basic_calendar_event_form">
                             <div class="row" >
                                 {#<div class="col-md-2">
@@ -29,34 +29,50 @@
                                     <input class="form-control" type="text" name="title">
                                 </div>
                             </div>
+                            <div class="col-md-12 spacer"></div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Description:</label>
                                     <textarea class="form-control" name="description"></textarea>
                                 </div>
                             </div>
+                            <div class="col-md-12 spacer"></div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <input class="form-check-input" type="checkbox" name="allDay" onclick="allDayToggle('time_chooser',this)">
                                     <label>All Day</label>
                                 </div>
                                 <div id="time_chooser" class="col-md-9">
-                                    <label>From : </label>
-                                    <input type="time" name="usr_time_from">
-                                    <label>To : </label>
-                                    <input type="time" name="usr_time_to">
+                                    <div class="col-md-2">
+                                        <label>From:</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="form-control" type="time" name="usr_time_from">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>To:</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input  class="form-control" type="time" name="usr_time_to">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-md-12 spacer"></div>
                             <div clas="row">
                                 {#<div class="col-md-12">#}
-                                    <label>Category : </label>
-                                    <select>
-                                        <option value="meeting">Meeting</option>
-                                        <option value="lecture">Lecture</option>
-                                        <option value="se">Something else</option>
+                                <div class="col-md-3">
+                                    <label>Category:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select name="color" class="form-control">
+                                        <option value="#FF0000">Meeting</option>
+                                        <option value="#00FF00">Lecture</option>
+                                        <option value="#0000FF">Something else</option>
                                     </select>
+                                </div>
                                 {#</div>#}
                             </div>
+                            <div class="col-md-12 spacer"></div>
                         </div>
                         <div class="col-md-12">
                             <a href="javascript:void(0)" data-toggle="collapse" data-target="#advanced_calendar_event_form">Advanced options</a>

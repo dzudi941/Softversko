@@ -20,15 +20,42 @@
                     {{ form_end(form) }}-->
                     <form class="row" id="calendar_event_form">
                         <div id="basic_calendar_event_form">
-                            <div class="col-md-6">
-                                <label>Title:</label>
-                                <input class="form-control" type="text" name="title">
-                                <input class="form-check-input" type="checkbox" name="allDay">
-                                <label>All Day</label>
+                            <div class="row" >
+                                {#<div class="col-md-2">
+                                    <label>Title :</label>
+                                </div>#}
+                                <div class="col-md-12">
+                                    <label>Title :</label>
+                                    <input class="form-control" type="text" name="title">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label>Description</label>
-                                <textarea class="form-control" name="description"></textarea>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Description:</label>
+                                    <textarea class="form-control" name="description"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input class="form-check-input" type="checkbox" name="allDay" onclick="allDayToggle('time_chooser',this)">
+                                    <label>All Day</label>
+                                </div>
+                                <div id="time_chooser" class="col-md-9">
+                                    <label>From : </label>
+                                    <input type="time" name="usr_time_from">
+                                    <label>To : </label>
+                                    <input type="time" name="usr_time_to">
+                                </div>
+                            </div>
+                            <div clas="row">
+                                {#<div class="col-md-12">#}
+                                    <label>Category : </label>
+                                    <select>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="lecture">Lecture</option>
+                                        <option value="se">Something else</option>
+                                    </select>
+                                {#</div>#}
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -122,8 +149,6 @@
                     //calendarEventForm[0].appendChild(divTag);
 
                     var modal = $('#myModal').modal('show');
-                    /*var button = $(ev.target);
-                    var offset = button.offset();*/
                     var top = jsEvent.originalEvent.clientY;
                     modal.css("top",top);
 
@@ -131,7 +156,7 @@
                     var leftOffset = parseInt(jsEvent.originalEvent.clientX)-(parseInt(windowWidth)/2);
                     modal.css("left",leftOffset);
 
-                   //ev.preventDefault();
+                    jsEvent.preventDefault();
                     $('#calendar_event_form_start').val(start.toDate().toUTCString());
                     $('#calendar_event_form_end').val(end.toDate().toUTCString());
 
@@ -251,7 +276,7 @@
             if(parseInt(top)+parseInt(modalDialogHeight)>parseInt(parentHeight)) {
                 top=parseInt(parentHeight)-parseInt(modalDialogHeight);
 
-                // modal.css("top", top);
+                modal.css("top", top);
                 console.log("Top offset changed to: "+top);
             }
 
@@ -299,5 +324,10 @@
         $('#modalCloseButton').click(function() {
             $('#myModal').modal('hide');
         });
+
+        function allDayToggle (it, box) {
+            var vis = (box.checked) ?  "none" : "block";
+            document.getElementById(it).style.display = vis;
+        }
     </script>
 {% endblock %}

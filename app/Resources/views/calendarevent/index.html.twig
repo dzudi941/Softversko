@@ -147,11 +147,6 @@
                     }
                 ],
                 eventRender: function(event, element) {
-                    //console.log(element[0].parentNode);
-                    /*element.qtip({
-                        content: event.description
-                    });*/
-                    //element.appendChild(event.description);
                     if(event.description)
                     {
                         var divTag = document.createElement("DIV");
@@ -160,11 +155,25 @@
                         element[0].appendChild(divTag);
                     }
 
-                    var aTag = document.createElement("A");
-                    aTag.appendChild(document.createTextNode("Edit"));
-                    aTag.href = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.id);
-                    element[0].appendChild(aTag);
+                    var eventOptionsTag = $('<div class="event-options"></div>');
+                    var editCalendarEventPath = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.entityId);
+                    var aTagEdit = $('<a href="'+editCalendarEventPath+'">Edit</a>');
+                    aTagEdit.appendTo(eventOptionsTag);
 
+                    var aTagDelete = $('<a class="event-delete-button">Delete</a>');
+                    console.log(event._id);
+                    aTagDelete.attr('data-entity-id', event.entityId);
+                    aTagDelete.attr('data-event-id', event._id);
+                    aTagDelete.click(function()
+                    {
+                        var entityId = $(this).data('entity-id');
+                        $.post("{{ path('delete_calendar_event') }}", {entityId: entityId});
+                        var eventId = $(this).data('event-id');
+                        $('#calendar-holder').fullCalendar('removeEvents', [eventId]);
+                    });
+                    aTagDelete.appendTo(eventOptionsTag);
+
+                    eventOptionsTag.appendTo(element[0]);
                 },
                 eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
 

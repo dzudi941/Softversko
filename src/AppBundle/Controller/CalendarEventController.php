@@ -156,8 +156,14 @@ class CalendarEventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $calendarEvents = $em->getRepository('AppBundle:CalendarEvent')->findAll();
-
+        $query = $em->createQuery('SELECT e FROM AppBundle:CalendarEvent e WHERE e.start > :starDate AND e.start < :endDate');
+        $query->setParameters(array(
+            'starDate' => new \DateTime($request->get('start')),
+            'endDate' => new \DateTime($request->get('end'))
+            ));
+        $calendarEvents = $query->getResult();
+        //$calendarEvents //= $em->getRepository('AppBundle:CalendarEvent')->findAll();
+        //dump(array('debug'=>$calendarEvents));
         $calendarEventsArray = [];
         foreach ($calendarEvents as $calendarEvent) {
             $calendarEventsArray[] = $calendarEvent->toArray();
@@ -212,6 +218,54 @@ class CalendarEventController extends Controller
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent("{'success': true}");
+        $response->setStatusCode(200);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/deleteCalendarEvent", name="delete_calendar_event")
+     * @Method("POST")
+     */
+    public function deleteCalendarEvent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $calendarEvent = $em->getRepository('AppBundle:CalendarEvent')->find($request->get('entityId'));
+        $em->remove($calendarEvent);
+        $em->flush();
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent("{'success': true}");
+        $response->setStatusCode(200);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/currentCalendarEvent", name= "current_calendar_event")
+     * @Method("POST")
+     */
+    public function currentDayCalendarEvent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('SELECT e FROM AppBundle:CalendarEvent e WHERE e.start >= :starDate AND e.start < :endDate');
+        $query->setParameters(array(
+            'starDate' => new \DateTime("-1 day"),
+            'endDate' => new \DateTime("+ 1 day")
+        ));
+        $calendarEvents = $query->getResult();
+        dump(array('debug'=>$calendarEvents));
+        $result = [];
+        foreach ($calendarEvents as $calendarEvent)
+        {
+            $result[] = $calendarEvent->toArray();
+        }
+        $data = json_encode($result);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent($data);
         $response->setStatusCode(200);
 
         return $response;

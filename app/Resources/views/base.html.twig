@@ -24,6 +24,7 @@
     </head>
     <body>
         {% block navigation %}
+            <button id="button">Send a notification</button>
             <nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -66,5 +67,71 @@
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}{% endblock %}
+        <script type="text/javascript">
+            document.getElementById('button').addEventListener('click',function(){
+                if ('Notification' in window) {
+                    let ask = Notification.requestPermission();
+                    ask.then( permission => {
+                        if ( permission === "granted" ) {
+                        let msg = new Notification( "Incoming notification!", {
+                            body: 'You have a new message.',
+                            icon: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/skype_icon.png'
+                        });
+                        msg.addEventListener( "click", event => {
+                            alert( "Click received" );
+                    })
+                    }
+                });
+                }
+            });
+            $.post("{{ path('current_calendar_event') }}", {'a':"A"}, function (data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++)
+                {
+                    console.log((new Date(data[i].start)).getTime());
+                }
+                var d = new Date();
+                console.log('local' + d.getTime());
+
+                var myVar = setInterval(myTimer, 1000);
+                //myTimer();
+                var boolArr = {};
+                for (var i = 0; i < data.length; i++) {
+                    boolArr[data[i].entityId] = false;
+                }
+                function myTimer() {
+                    var d = new Date();
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        //console.log((new Date(data[i].start)).getTime() -d.getTime() < 1000 * 60 * 2); //two minuts before
+                        if((new Date(data[i].start)).getTime() -d.getTime() < 1000 * 60 * 2 &&
+                            (new Date(data[i].start)).getTime() -d.getTime() > 0 &&
+                            boolArr[data[i].entityId] == false) {
+                            console.log((new Date(data[i].start)).getTime());
+                            boolArr[data[i].entityId] = true
+
+                            ShowNotification(data[i].title, "");
+                        }
+                    }
+                }
+            });
+            function ShowNotification(title, message) {
+                if ('Notification' in window) {
+                    let ask = Notification.requestPermission();
+                    ask.then( permission => {
+                        if ( permission === "granted" ) {
+                        let msg = new Notification( "Incoming notification!", {
+                            body: title,
+                            icon: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/skype_icon.png'
+                        });
+                        msg.addEventListener( "click", event => {
+                            alert( "Click received" );
+                    })
+                    }
+                });}
+            }
+
+
+        </script>
     </body>
 </html>

@@ -36,6 +36,14 @@ body{
 
 .event-description{
     padding-top: 10px;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     text-align: justify;
+}
+
+.event-delete-button{
+    float: right;
+}
+
+.event-options{
+    padding-top: 10px;
 }

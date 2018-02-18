@@ -186,6 +186,14 @@ class CalendarEventController extends Controller
     {
         $calendarEvent = new CalendarEvent();
         $calendarEvent->fromArray($request->get('newEvent'));
+        $e = $request->get('newEvent');
+        $timeFrom = $e['usr_time_from'];
+        $timeTo = $e['usr_time_to'];
+        $timeFrom_array = explode(":",$timeFrom);
+        $calendarEvent->getStart()->setTime($timeFrom_array[0],$timeFrom_array[1]);
+        $timeTo_array = explode(":",$timeTo);
+        $calendarEvent->getEnd()->setTime($timeTo_array[0],$timeTo_array[1]);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($calendarEvent);
         $em->flush();

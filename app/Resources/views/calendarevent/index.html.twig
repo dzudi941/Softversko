@@ -47,13 +47,13 @@
                                         <label>From:</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <input class="form-control" type="time" name="usr_time_from">
+                                        <input class="form-control" type="time" name="startTime">
                                     </div>
                                     <div class="col-md-2">
                                         <label>To:</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <input  class="form-control" type="time" name="usr_time_to">
+                                        <input  class="form-control" type="time" name="endTime">
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +143,10 @@
         });*/
 
         $(document).ready(function() {
-
+            if(localStorage.getItem('currentView') != "undefined")
+            {
+                $('#calendar').fullCalendar('changeView', localStorage.getItem('currentView'));
+            }
 
             $('#calendar-holder').fullCalendar({
                 header: {
@@ -153,16 +156,12 @@
                 },
 
                 navLinks: true, // can click day/week names to navigate views
+
                 selectable: true,
                 selectHelper: true,
                 select: function(start, end, jsEvent) {
 
-                    console.log(jsEvent.originalEvent.clientX);
-                    //var calendarEventForm = $('#calendar_event_form');
-                    //console.log(calendarEventForm);
-                    //var divTag = document.createElement("INPUT");
-                    //divTag.appendChild(document.createTextNode("Aaa"));
-                    //calendarEventForm[0].appendChild(divTag);
+                    //console.log(jsEvent.originalEvent.clientX);
 
                     var modal = $('#myModal').modal('show');
                     var top = jsEvent.originalEvent.clientY;
@@ -202,7 +201,7 @@
                     aTagEdit.appendTo(eventOptionsTag);
 
                     var aTagDelete = $('<a class="event-delete-button"><i class="fa fa-trash-o fa-lg"></i></a>');
-                    console.log(event._id);
+                    //console.log(event._id);
                     aTagDelete.attr('data-entity-id', event.entityId);
                     aTagDelete.attr('data-event-id', event._id);
                     aTagDelete.click(function()
@@ -215,10 +214,24 @@
                     aTagDelete.appendTo(eventOptionsTag);
 
                     eventOptionsTag.appendTo(element[0]);
+
+                    //event.start.toDate().timezone().set
                 },
                 eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
 
-                    console.log(event);
+                    //console.log(event);
+                    $.post("{{ path('edit_calendar_event') }}",
+                        {editEvent:
+                                {
+                                    entityId: event.entityId,
+                                    title: event.title,
+                                    start: event.start.toDate().toUTCString(),
+                                    end: event.end.toDate().toUTCString()
+                                }
+                        });
+                },
+
+                eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
                     $.post("{{ path('edit_calendar_event') }}",
                         {editEvent:
                                 {
@@ -230,6 +243,10 @@
                         });
                 }
 
+                /*viewRender: function( view, element ){
+                    //localStorage.setItem('currentView', view);
+                }*/
+
                 /*dayRender: function (date,cell) {
                   /!* var td = $(cell);
                    var button = td.add( "button" ).addClass( "btn btn-info btn-circle btn-lg addCalendarEventButton" );
@@ -240,7 +257,8 @@
             });
 
         });
-        
+        //var offset = new Date().getTimezoneOffset();
+        //console.log("timezone" + offset);
         function createNewCalendarEvent() {
             console.log($('#calendar_event_form').serializeArray());
             var calendarEventForm = $('#calendar_event_form');
@@ -250,12 +268,36 @@
             {
                 newEvent[calendarEventFormArray[i].name] = calendarEventFormArray[i].value;
             }
-            console.log(newEvent);
+
+            var view = $('#calendar-holder').fullCalendar('getView');
+            console.log(view);
+            if(['month', 'basicWeek', 'basicDay'].includes(view.type))
+            {
+                var startDate = new Date(newEvent.start);
+                var startTimeArr = newEvent.startTime.split(":");
+                if(startTimeArr[0].match(/^[0-9]+$/) != null && startTimeArr[1].match(/^[0-9]+$/) != null)
+                    startDate.setHours(startTimeArr[0], startTimeArr[1]);
+
+                newEvent.start = startDate.toUTCString();
+                var endDate = new Date(newEvent.end);
+
+                var endTimeArr = newEvent.endTime.split(":");
+                if(endTimeArr[0].match(/^[0-9]+$/) != null && endTimeArr[1].match(/^[0-9]+$/) != null) {
+                    endDate.setDate(endDate.getDate() - 1);
+                    endDate.setHours(endTimeArr[0], endTimeArr[1]);
+                }
+                console.log(startDate);
+                newEvent.end = endDate.toUTCString();
+
+                delete newEvent.startTime;
+                delete newEvent.endTime;
+            }
+
             $.post("{{ path('new_calendar_event') }}",
                 {newEvent:
                     newEvent
                 });
-
+            //newEvent.start = startDate;
             $('#calendar-holder').fullCalendar('renderEvent', newEvent, true);
 
             $('#calendar-holder').fullCalendar('unselect');

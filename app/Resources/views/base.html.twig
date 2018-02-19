@@ -85,13 +85,13 @@
                 }
             });*/
             $.post("{{ path('current_calendar_event') }}", {'a':"A"}, function (data) {
-                console.log(data);
+                /*console.log(data);
                 for (var i = 0; i < data.length; i++)
                 {
                     console.log((new Date(data[i].start)).getTime());
-                }
+                }*/
                 var d = new Date();
-                console.log('local' + d.getTime());
+                //console.log('local' + d.getTime());
 
                 var myVar = setInterval(myTimer, 1000);
                 //myTimer();

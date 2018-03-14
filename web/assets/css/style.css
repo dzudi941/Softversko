@@ -56,3 +56,7 @@ body{
 .spacer{
     height: 10px;
 }
+
+.user-description-header {
+    color: white;
+}

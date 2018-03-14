@@ -23,19 +23,29 @@
 
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body class="app-body">
         {% block navigation %}
             <nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#">WebSiteName</a>
+                        <a class="navbar-brand" href="/calendarevent">Eevent</a>
                     </div>
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
                     </ul>
+                    {% if app.user %}
+                        <div class="navbar-form navbar-right">
+                            <div class="row">
+                                <div class="dropdown">
+                                    <a class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>   Logged in as {{ app.user }}
+                                        </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/admin/logout">Logout!</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% else %}
                     <form id="signin" class="navbar-form navbar-right" action="{{ path("sonata_user_admin_security_check") }}" method="post" role="form">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -59,7 +69,7 @@
 
                         <button type="submit" class="btn btn-primary">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
                     </form>
-
+                    {% endif %}
                 </div>
             </nav>
         {% endblock %}

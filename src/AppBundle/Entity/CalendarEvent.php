@@ -140,6 +140,14 @@ class CalendarEvent
      */
     private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userEmail", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="User", mappedBy="userEmail")
+     */
+    private $userEmail;
+
 
     /**
      * Set id.
@@ -187,6 +195,30 @@ class CalendarEvent
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set user email.
+     *
+     * @param string|null $title
+     *
+     * @return CalendarEvent
+     */
+    public function setUserEmail($email = null)
+    {
+        $this->userEmail = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get user email.
+     *
+     * @return string|null
+     */
+    public function getUserEmail()
+    {
+        return $this->userEmail;
     }
 
     /**

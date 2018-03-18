@@ -29,31 +29,6 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
-    # add more services, or override services that need manual wiring
-    # AppBundle\Service\ExampleService:
-    #     arguments:
-    #         $someArgument: 'some_value'
-
-    admin.category:
-        class: AppBundle\Admin\CategoryAdmin
-        arguments: [~, AppBundle\Entity\Category, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Category }
-        public: true
-
-    admin.blog_post:
-        class: AppBundle\Admin\BlogPostAdmin
-        arguments: [~, AppBundle\Entity\BlogPost, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Blog post }
-        public: true
-
-    admin.event:
-        class: AppBundle\Admin\EventAdmin
-        arguments: [~, AppBundle\Entity\Event, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Event }
-        public: true
 
     admin.login:
       class: AppBundle\Controller\LoginListener

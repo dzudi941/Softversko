@@ -2,19 +2,6 @@ app_calendar_event:
     resource: "@AppBundle/Controller/CalendarEventController.php"
     type:     annotation
 
-app_event:
-    resource: "@AppBundle/Controller/EventController.php"
-    type:     annotation
-
-app_test:
-    resource: "@AppBundle/Controller/TestController.php"
-    type:     annotation
-
-softversko:
-    resource: "@SoftverskoBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

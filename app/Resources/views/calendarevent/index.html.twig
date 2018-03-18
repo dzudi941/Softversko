@@ -13,11 +13,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                 </div>
-                <div class="modal-body" >
-                    <!--{{ form_start(form) }}
-                    {{ form_widget(form) }}
-                    <input type="submit" value="Create" />
-                    {{ form_end(form) }}-->
+                <div class="modal-body row">
                     <form class="col-md-12" id="calendar_event_form">
                         <input type="hidden" name="entityId">
                         <div id="basic_calendar_event_form">
@@ -104,12 +100,9 @@
 
 
 {% block javascripts %}
-    <!--<script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/lib/jquery.min.js') }}"></script>-->
     <script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/lib/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/fullcalendar.min.js') }}"></script>
-    <!--<script type="text/javascript" src="{{ asset('assets/fullcalendar/js/fullcalendar/fullcalendar.default-settings.js') }}"></script>-->
     <script type="text/javascript">
-
         var currentEventEditing;
         var eventsLoaded = false;
 
@@ -118,9 +111,9 @@
             {
                 currentEventEditing = event;
                 var inputs = $('#calendar_event_form :input');
-                //console.log(inputs.filter(input => input.name=="title"));
                 $(inputs[0]).val(event.entityId);
                 $(inputs[1]).val(event.title);
+                console.log(inputs[2]);
                 $(inputs[2]).text(event.description);
                 $(inputs[3]).checked = event.allDay;
                 $(inputs[4]).val(event.start.toDate().time);
@@ -129,14 +122,9 @@
 
                 $('#calendar_event_form_start').val(event.start.toDate().toUTCString());
                 $('#calendar_event_form_end').val(event.end.toDate().toUTCString());
-
                 $('#editEventButton').show();
                 $('#myModal').modal('show');
             }
-
-
-
-
 
             $('#calendar-holder').fullCalendar({
                 header: {
@@ -144,9 +132,7 @@
                     center: 'title',
                     right: 'month, basicWeek, basicDay,agendaWeek,agendaDay'
                 },
-
                 navLinks: true, // can click day/week names to navigate views
-
                 selectable: true,
                 selectHelper: true,
                 eventClick: function(event, element)
@@ -157,17 +143,11 @@
                     }
                 },
                 select: function(start, end, jsEvent) {
-
-                    //console.log(jsEvent.originalEvent.clientX);
-
-
                     //var top = jsEvent.originalEvent.clientY;
                     //modal.css("top",top);
-
-                   // var windowWidth = $(window).width();
+                    //var windowWidth = $(window).width();
                     //var leftOffset = parseInt(jsEvent.originalEvent.clientX)-(parseInt(windowWidth)/2);
                     //modal.css("left",leftOffset);
-
                     jsEvent.preventDefault();
                     $('#calendar_event_form_start').val(start.toDate().toUTCString());
                     $('#calendar_event_form_end').val(end.toDate().toUTCString());
@@ -195,14 +175,10 @@
                         divTag.className = "event-description";
                         element[0].appendChild(divTag);
                     }
-
                     var eventOptionsTag = $('<div class="event-options"></div>');
-                    var editCalendarEventPath = "{{ path('calendarevent_edit', {'id':-1}) }}".replace("-1", event.entityId);
                     var aTagEdit = $('<a id="editEventId-'+event.entityId+'" class="event-edit-button" ><i class="fa fa-edit fa-lg"></i></a>');
                     aTagEdit.appendTo(eventOptionsTag);
-
                     var aTagDelete = $('<a class="event-delete-button"><i class="fa fa-trash-o fa-lg"></i></a>');
-                    //console.log(event._id);
                     aTagDelete.attr('data-entity-id', event.entityId);
                     aTagDelete.attr('data-event-id', event._id);
                     aTagDelete.click(function()
@@ -213,14 +189,9 @@
                         $('#calendar-holder').fullCalendar('removeEvents', [eventId]);
                     });
                     aTagDelete.appendTo(eventOptionsTag);
-
                     eventOptionsTag.appendTo(element[0]);
-
-                    //event.start.toDate().timezone().set
                 },
                 eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
-
-                    //console.log(event);
                     $.post("{{ path('edit_calendar_event') }}",
                         {editEvent:
                                 {
@@ -231,7 +202,6 @@
                                 }
                         });
                 },
-
                 eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
                     $.post("{{ path('edit_calendar_event') }}",
                         {editEvent:
@@ -243,9 +213,7 @@
                                 }
                         });
                 },
-
                 viewRender: function( view, element ){
-
                     if(localStorage.getItem('currentView') != "undefined" && eventsLoaded == false)
                     {
                         $('#calendar-holder').fullCalendar('changeView', localStorage.getItem('currentView'));
@@ -254,24 +222,14 @@
                         localStorage.setItem('currentView', view.name);
                     }
                 },
-
                 eventAfterAllRender: function () {
                     eventsLoaded = true;
                 }
-
-                /*dayRender: function (date,cell) {
-                  /!* var td = $(cell);
-                   var button = td.add( "button" ).addClass( "btn btn-info btn-circle btn-lg addCalendarEventButton" );
-                    button.add("i").addClass("glyphicon glyphicon-plus");*!/
-                  var btn = $(cell).append( "<button class='btn btn-info btn-circle btn-xs modalSubmitButton'><i class=\"glyphicon glyphicon-plus\"></i></button>" );
-                  btn.hide();
-                }*/
             });
 
         });
 
         function updateCalendarEvent() {
-            console.log($('#calendar_event_form').serializeArray());
             var calendarEventForm = $('#calendar_event_form');
             var calendarEventFormArray = calendarEventForm.serializeArray();
             var editEvent = {};
@@ -279,9 +237,8 @@
             {
                 editEvent[calendarEventFormArray[i].name] = calendarEventFormArray[i].value;
             }
-
             var view = $('#calendar-holder').fullCalendar('getView');
-            console.log(view);
+
             if(['month', 'basicWeek', 'basicDay'].includes(view.type))
             {
                 var startDate = new Date(editEvent.start);
@@ -319,8 +276,6 @@
             $('#myModal').modal('hide');
         }
 
-        //var offset = new Date().getTimezoneOffset();
-        //console.log("timezone" + offset);
         function createNewCalendarEvent() {
             console.log($('#calendar_event_form').serializeArray());
             var calendarEventForm = $('#calendar_event_form');
@@ -359,47 +314,25 @@
                 {newEvent:
                     newEvent
                 });
-            //newEvent.start = startDate;
+
             $('#calendar-holder').fullCalendar('renderEvent', newEvent, true);
-
             $('#calendar-holder').fullCalendar('unselect');
-
-            //calendarEventForm.find("input, textarea").val("");
-
             $('#myModal').modal('hide');
         }
 
         $('#myModal').on('hidden.bs.modal', function () {
             var calendarEventForm = $('#calendar_event_form');
-            calendarEventForm.find("input, textarea").val("");
+            calendarEventForm.find("input").val("");
+            calendarEventForm.find("textarea").text("");
             $('#editEventButton').hide();
             $('#createEventButton').hide();
         });
 
         $('#myModal').on('shown.bs.modal', function () {
-
-
-            // get the viewport height
-            var viewportHeight = $(window).height();
-            console.log ('viewportHeight = ' + viewportHeight);
-
-
-            // get the viewport width
-            var viewportWidth = $(window).width();
-            console.log ('viewportWidth = ' + viewportWidth);
-
             var modalDialogHeight = $(this).find('.modal-dialog').outerHeight(true);
-            console.log ('modalDialogHeight = ' + modalDialogHeight);
-
-            var modalDialogWidth = $(this).find('.modal-dialog').outerWidth(true);
-            console.log ('modalDialogWidth = ' + modalDialogWidth);
-
             var parentHeight = $( window ).height();
             var modal = $('#myModal');
             var top = modal.offset().top;
-
-            console.log('Top offset = ' + top);
-            console.log('Parent height = '+ parentHeight);
 
             if(parseInt(top)+parseInt(modalDialogHeight)>parseInt(parentHeight)) {
                 top=parseInt(parentHeight)-parseInt(modalDialogHeight);
@@ -407,45 +340,17 @@
                 modal.css("top", top);
                 console.log("Top offset changed to: "+top);
             }
-
-            //When the browser window is being resized
-            var modalContentWidthHeight = function () {
-
-                var modalContentWidth = $('#myModal').find('.modal-content').outerWidth(true);
-                console.log ('modalContentWidth = ' + modalContentWidth);
-
-                var modalContentHeight = $('#myModal').find('.modal-content').outerHeight(true);
-                console.log ('modalContentHeight = ' + modalContentHeight);
-            };
-
-            $(window).resize(modalContentWidthHeight);
-
         });
 
-        /*$('#myform').on('submit', function(ev) {
-            var modal = $('#myModal').modal('show');
-            var button = $('#modalSubmitButton');
-            var offset = button.offset();
-            var top=offset.top;
-            modal.css("top", top);
-
-            var parentWidth = $( window ).width();
-            var left = parseInt(offset.left)- (parseInt(parentWidth)/2 );
-            modal.css("left",left);
-
-            ev.preventDefault()});
-*/
         $('.modalSubmitButton').click(function (ev) {
             var modal = $('#myModal').modal('show');
             var button = $(ev.target);
             var offset = button.offset();
             var top = offset.top;
             modal.css("top",top);
-
             var windowWidth = $(window).width();
             var leftOffset = parseInt(offset.left)-(parseInt(windowWidth)/2);
             modal.css("left",leftOffset);
-
             ev.preventDefault()
         });
 

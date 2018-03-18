@@ -28,7 +28,11 @@
             <nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="/calendarevent">Eevent</a>
+                        {% if app.user and app.user.groups|length>0 %}
+                        <a class="navbar-brand" href="/calendarevent">Eevent - {{ app.user.groups[0].getName() }}</a>
+                        {% else %}
+                            <a class="navbar-brand" href="/calendarevent">Eevent</a>
+                        {% endif %}
                     </div>
                     <ul class="nav navbar-nav">
                     </ul>

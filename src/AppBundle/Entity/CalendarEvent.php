@@ -148,6 +148,36 @@ class CalendarEvent
      */
     private $userEmail;
 
+    /**
+     * @var int
+     * @ORM\Column(name="groupId", type="integer")
+     */
+    private $groupId;
+
+
+    /**
+     * Set groupId.
+     *
+     * @param int $groupId
+     *
+     * @return CalendarEvent
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    /**
+     * Get groupId.
+     *
+     * @return int
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
 
     /**
      * Set id.

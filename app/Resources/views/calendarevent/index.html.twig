@@ -111,47 +111,7 @@
     <script type="text/javascript">
 
         var currentEventEditing;
-        /*$(function () {
-            $('#calendar-holder').fullCalendar({
-                header: {
-                    left: 'prev, next',
-                    center: 'title',
-                    right: 'month, basicWeek, basicDay,'
-                },
-                lazyFetching: true,
-                timeFormat: {
-                    agenda: 'h:mmt',
-                    '': 'h:mmt'
-                },
-                eventStartEditable:{
-                    default:true
-                },
-                eventSources: [
-                    {
-                        url: '{{ path("load_calendar_event") }}',
-                        type: 'POST',
-                        data: {},
-                        error: function () {}
-                    }
-                ],
-                eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-                    console.log(event);
-                },
-
-                dayClick: function(day) {
-                    console.log(day);
-                    alert('a day has been clicked!');
-                }
-
-            });
-        });*/
-
-        /*function EditEvent() {
-
-            alert("edit event");
-
-            return false;
-        }*/
+        var eventsLoaded = false;
 
         $(document).ready(function() {
             function UpdateModalFields(event)
@@ -176,10 +136,7 @@
 
 
 
-            if(localStorage.getItem('currentView') != "undefined")
-            {
-                $('#calendar').fullCalendar('changeView', localStorage.getItem('currentView'));
-            }
+
 
             $('#calendar-holder').fullCalendar({
                 header: {
@@ -285,11 +242,22 @@
                                     end: event.end.toDate().toUTCString()
                                 }
                         });
-                }
+                },
 
-                /*viewRender: function( view, element ){
-                    //localStorage.setItem('currentView', view);
-                }*/
+                viewRender: function( view, element ){
+
+                    if(localStorage.getItem('currentView') != "undefined" && eventsLoaded == false)
+                    {
+                        $('#calendar-holder').fullCalendar('changeView', localStorage.getItem('currentView'));
+                    }
+                    else {
+                        localStorage.setItem('currentView', view.name);
+                    }
+                },
+
+                eventAfterAllRender: function () {
+                    eventsLoaded = true;
+                }
 
                 /*dayRender: function (date,cell) {
                   /!* var td = $(cell);

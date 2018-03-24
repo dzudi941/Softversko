@@ -29,9 +29,9 @@
                 <div class="container-fluid">
                     <div class="navbar-header">
                         {% if app.user and app.user.groups|length>0 %}
-                        <a class="navbar-brand" href="/calendarevent">Eevent - {{ app.user.groups[0].getName() }}</a>
+                        <a class="navbar-brand" href="/calendarevent">Event - {{ app.user.groups[0].getName() }}</a>
                         {% else %}
-                            <a class="navbar-brand" href="/calendarevent">Eevent</a>
+                            <a class="navbar-brand" href="/calendarevent">Events Management System</a>
                         {% endif %}
                     </div>
                     <ul class="nav navbar-nav">
@@ -43,7 +43,7 @@
                                     <a class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>   Logged in as {{ app.user }}
                                         </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="/admin/logout">Logout!</a></li>
+                                        <li><a href="/admin/logout">Logout </a></li>
                                     </ul>
                                 </div>
 

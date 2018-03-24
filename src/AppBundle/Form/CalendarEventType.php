@@ -13,7 +13,24 @@ class CalendarEventType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title')->add('allDay')->add('start')->add('end')->add('url')->add('className')->add('editable')->add('startEditable')->add('durationEditable')->add('resourceEditable')->add('rendering')->add('overlap')->add('color')->add('backgroundColor')->add('borderColor')->add('textColor')->add('description', 'textarea');
+        $builder
+            ->add('title')
+            ->add('allDay')
+            ->add('start')
+            ->add('end')
+            ->add('url')
+            ->add('className')
+            ->add('editable')
+            ->add('startEditable')
+            ->add('durationEditable')
+            ->add('resourceEditable')
+            ->add('rendering')
+            ->add('overlap')
+            ->add('color')
+            ->add('backgroundColor')
+            ->add('borderColor')
+            ->add('textColor')
+            ->add('description', 'textarea');
     }/**
      * {@inheritdoc}
      */

@@ -113,11 +113,11 @@
                 var inputs = $('#calendar_event_form :input');
                 $(inputs[0]).val(event.entityId);
                 $(inputs[1]).val(event.title);
-                console.log(inputs[2]);
+                //console.log(inputs[2]);
                 $(inputs[2]).text(event.description);
                 $(inputs[3]).checked = event.allDay;
-                $(inputs[4]).val(event.start.toDate().time);
-                $(inputs[5]).val(event.end.toDate().time);
+                $(inputs[4]).val(event.start.format('HH:mm'));
+                $(inputs[5]).val(event.end.format('HH:mm'));
                 $(inputs[6]).val(event.color);
 
                 $('#calendar_event_form_start').val(event.start.toDate().toUTCString());
@@ -254,7 +254,7 @@
                     endDate.setDate(endDate.getDate() - 1);
                     endDate.setHours(endTimeArr[0], endTimeArr[1]);
                 }
-                console.log(startDate);
+                //console.log(startDate);
                 editEvent.end = endDate.toUTCString();
 
                 delete editEvent.startTime;
@@ -277,7 +277,7 @@
         }
 
         function createNewCalendarEvent() {
-            console.log($('#calendar_event_form').serializeArray());
+            //console.log($('#calendar_event_form').serializeArray());
             var calendarEventForm = $('#calendar_event_form');
             var calendarEventFormArray = calendarEventForm.serializeArray();
             var newEvent = {};
@@ -287,15 +287,15 @@
             }
 
             var view = $('#calendar-holder').fullCalendar('getView');
-            console.log(view);
+            //console.log(view);
             if(['month', 'basicWeek', 'basicDay'].includes(view.type))
             {
                 var startDate = new Date(newEvent.start);
                 var startTimeArr = newEvent.startTime.split(":");
                 if(startTimeArr[0].match(/^[0-9]+$/) != null && startTimeArr[1].match(/^[0-9]+$/) != null)
                     startDate.setHours(startTimeArr[0], startTimeArr[1]);
-
-                newEvent.start = startDate.toUTCString();
+                console.log(startDate.toUTCString());
+                newEvent.start = startDate //.toUTCString();
                 var endDate = new Date(newEvent.end);
 
                 var endTimeArr = newEvent.endTime.split(":");
@@ -303,8 +303,8 @@
                     endDate.setDate(endDate.getDate() - 1);
                     endDate.setHours(endTimeArr[0], endTimeArr[1]);
                 }
-                console.log(startDate);
-                newEvent.end = endDate.toUTCString();
+                //console.log(startDate);
+                newEvent.end = endDate//.toUTCString();
 
                 delete newEvent.startTime;
                 delete newEvent.endTime;
@@ -338,7 +338,7 @@
                 top=parseInt(parentHeight)-parseInt(modalDialogHeight);
 
                 modal.css("top", top);
-                console.log("Top offset changed to: "+top);
+                //console.log("Top offset changed to: "+top);
             }
         });
 

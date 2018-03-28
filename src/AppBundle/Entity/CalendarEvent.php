@@ -682,12 +682,16 @@ class CalendarEvent
     public function fromArray(array $inArray)
     {
         $this->setTitle($inArray['title']);
-        $this->setStart(new \DateTime($inArray['start']));
+        $start_time = substr($inArray['start'], 0, strpos($inArray['start'], '('));
+        $this->setStart(new \DateTime($start_time));
 
         if(array_key_exists('allDay', $inArray))
             $this->setAllDay($inArray['allDay']);
         if(array_key_exists('end', $inArray))
-            $this->setEnd(new \DateTime($inArray['end']));
+        {
+            $end_time = substr($inArray['end'], 0, strpos($inArray['end'], '('));
+            $this->setEnd(new \DateTime($end_time));
+        }
         if(array_key_exists('url', $inArray))
             $this->setUrl($inArray['url']);
         if(array_key_exists('className', $inArray))

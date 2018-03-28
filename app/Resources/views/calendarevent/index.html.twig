@@ -246,7 +246,7 @@
                 if(startTimeArr[0].match(/^[0-9]+$/) != null && startTimeArr[1].match(/^[0-9]+$/) != null)
                     startDate.setHours(startTimeArr[0], startTimeArr[1]);
 
-                editEvent.start = startDate.toUTCString();
+                editEvent.start = startDate//.toUTCString();
                 var endDate = new Date(editEvent.end);
 
                 var endTimeArr = editEvent.endTime.split(":");
@@ -255,7 +255,7 @@
                     endDate.setHours(endTimeArr[0], endTimeArr[1]);
                 }
                 //console.log(startDate);
-                editEvent.end = endDate.toUTCString();
+                editEvent.end = endDate//.toUTCString();
 
                 delete editEvent.startTime;
                 delete editEvent.endTime;
@@ -321,6 +321,7 @@
         }
 
         $('#myModal').on('hidden.bs.modal', function () {
+            console.log("hidden")
             var calendarEventForm = $('#calendar_event_form');
             calendarEventForm.find("input").val("");
             calendarEventForm.find("textarea").text("");
